@@ -2,7 +2,6 @@
   "name": "normalizador-app",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://agarro.github.io/normalizador_calles",
   "type": "module",
   "scripts": {
     "dev": "vite",
