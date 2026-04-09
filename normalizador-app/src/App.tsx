@@ -7,7 +7,7 @@ import {
   PieChart, Pie, Cell, Legend 
 } from 'recharts';
 import streetsData from './streets.json';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+// import { GoogleGenerativeAI } from '@google/generative-ai'; // Removido por seguridad
 
 // Use environment variable for the API Key
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || "";
@@ -278,8 +278,7 @@ export default function App() {
     setProgress(0);
 
     try {
-      const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-      const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
+      // Logic moved to proxy
 
       const allUniqueToNormalize = new Set<string>();
       data.forEach(row => {
@@ -333,9 +332,19 @@ export default function App() {
           });
 
           const prompt = `Normaliza estas calles: [${batch.join(', ')}]. Referencia: [${Array.from(candidates).join(', ')}]. Responde SOLO JSON: {"original": "oficial"}.`;
-          const result = await model.generateContent(prompt);
-          const response = await result.response;
-          const text = response.text();
+          const proxyResponse = await fetch('/api/normalize', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt })
+          });
+
+          if (!proxyResponse.ok) {
+            const errorBody = await proxyResponse.json();
+            throw new Error(errorBody.error || `Error Proxy: ${proxyResponse.status}`);
+          }
+
+          const proxyData = await proxyResponse.json();
+          const text = proxyData.text;
           
           try {
             const batchCorrections = JSON.parse(text.replace(/```json/g, '').replace(/```/g, '').trim());
