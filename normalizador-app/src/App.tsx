@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import * as XLSX from 'xlsx';
-import { Upload, CheckCircle, CheckCircle2, Download, AlertCircle, Loader2, Table as TableIcon, Layers, FileSpreadsheet, Database, X, BarChart3, PieChart as PieChartIcon, Info, FileText } from 'lucide-react';
+import { Upload, CheckCircle2, Download, AlertCircle, Loader2, Table as TableIcon, Layers, FileSpreadsheet, Database, X, BarChart3, PieChart as PieChartIcon, Info, FileText } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
@@ -135,10 +135,10 @@ const AnalyticsModal = ({ results, selectedColumns, onClose }: { results: Row[],
                           paddingAngle={5} 
                           dataKey="value" 
                           stroke="none"
-                          label={({ name, value, percent }) => `${value} (${(percent * 100).toFixed(0)}%)`}
+                          label={({ value, percent }) => `${value} (${((percent || 0) * 100).toFixed(0)}%)`}
                           labelLine={false}
                         >
-                          {data.pieData.map((entry, index) => (
+                          {data.pieData.map((_, index) => (
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                           ))}
                         </Pie>

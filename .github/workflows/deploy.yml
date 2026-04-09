@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Multi-Cloud Deployment
 
 on:
   push:
@@ -29,14 +29,39 @@ jobs:
           npm install
           npm run build
 
+      # 1. GitHub Pages
       - name: Setup Pages
         uses: actions/configure-pages@v4
-
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: normalizador-app/dist
-
       - name: Deploy to GitHub Pages
-        id: deployment
+        id: deployment_gh
         uses: actions/deploy-pages@v4
+
+      # 2. Google Cloud (Auth)
+      - name: Google Auth
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      # 3. Cloud Run
+      - name: Deploy to Cloud Run
+        id: deployment_run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: normalizador
+          region: us-central1
+          source: normalizador-app
+          flags: '--allow-unauthenticated'
+
+      # 4. Firebase Hosting
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.GCP_SA_KEY }}
+          channelId: live
+          projectId: gen-lang-client-0718020659
