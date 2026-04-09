@@ -28,6 +28,8 @@ jobs:
           cd normalizador-app
           npm install
           npm run build
+        env:
+          VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
 
       # 1. GitHub Pages
       - name: Setup Pages

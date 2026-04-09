@@ -9,8 +9,8 @@ import {
 import streetsData from './streets.json';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-// Hardcoded API Key as requested by the user
-const GEMINI_API_KEY = "AIzaSyDBRNGW9_VAwNTRIJQjENVA21Fz3yW4hc0";
+// Use environment variable for the API Key
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || "";
 
 interface Row {
   [key: string]: any;
