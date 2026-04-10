@@ -10,7 +10,7 @@ import streetsData from './streets.json';
 // import { GoogleGenerativeAI } from '@google/generative-ai'; // Removido por seguridad
 
 // Use environment variable for the API Key
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || "";
+//const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || "";
 
 interface Row {
   [key: string]: any;
