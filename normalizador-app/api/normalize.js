@@ -6,7 +6,7 @@ module.exports = async (req, res) => {
   }
 
   const { prompt } = req.body;
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
   if (!prompt) {
     return res.status(400).json({ error: 'Prompt is required' });
